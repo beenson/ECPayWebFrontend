@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
+import axios from 'axios'
+import JwtService from '@core/auth/jwt/jwtService'
 
 import router from './router'
 import store from './store'
@@ -28,7 +30,11 @@ require('@/assets/scss/style.scss')
 
 Vue.config.productionTip = false
 
-new Vue({
+const instance = axios.create()
+const auth = new JwtService(instance, {})
+window.auth = auth
+
+window.vue = new Vue({
   router,
   store,
   render: h => h(App),

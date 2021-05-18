@@ -194,6 +194,7 @@ import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import querystring from 'querystring'
 
 export default {
   components: {
@@ -243,13 +244,34 @@ export default {
     validationForm() {
       this.$refs.loginValidation.validate().then(success => {
         if (success) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Form Submitted',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
+          window.auth.login(querystring.stringify({
+            email: this.userEmail,
+            password: this.password,
+          })).then(res => {
+            if (res.data.error) {
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: res.data.error,
+                  icon: 'EditIcon',
+                  variant: 'danger',
+                },
+              })
+            } else {
+              window.auth.setToken(res.data.token)
+              window.auth.setRefreshToken(res.data.token)
+              localStorage.setItem('user', JSON.stringify(res.data.user))
+              this.$router.replace('/').then(() => {
+                this.$toast({
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Login Success',
+                    icon: 'EditIcon',
+                    variant: 'success',
+                  },
+                })
+              })
+            }
           })
         }
       })

@@ -22,6 +22,7 @@ const router = new VueRouter({
             active: true,
           },
         ],
+        access: 'user',
       },
     },
     {
@@ -69,6 +70,16 @@ router.afterEach(() => {
   if (appLoading) {
     appLoading.style.display = 'none'
   }
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.access) {
+    window.auth.refreshToken()
+    if (!window.auth.getToken()) {
+      next({ name: 'login' })
+    }
+  }
+  next()
 })
 
 export default router

@@ -1,3 +1,4 @@
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import jwtDefaultConfig from './jwtDefaultConfig'
 
 export default class JwtService {
@@ -41,6 +42,18 @@ export default class JwtService {
         const { config, response } = error
         const originalRequest = config
 
+        this.setRefreshToken()
+        this.setToken()
+        window.vue.$router.replace('/login').then(() => {
+          window.vue.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Please Login',
+              icon: 'EditIcon',
+              variant: 'danger',
+            },
+          })
+        })
         // if (status === 401) {
         if (response && response.status === 401) {
           if (!this.isAlreadyFetchingAccessToken) {
@@ -48,11 +61,16 @@ export default class JwtService {
             this.refreshToken().then(r => {
               this.isAlreadyFetchingAccessToken = false
 
+              if (r.status === 401) {
+                this.setRefreshToken()
+                this.setToken()
+                this.$router.replace('/login')
+              }
               // Update accessToken in localStorage
-              this.setToken(r.data.accessToken)
-              this.setRefreshToken(r.data.refreshToken)
+              this.setToken(r.data.token) // accessToken
+              this.setRefreshToken(r.data.token) // refreshToken
 
-              this.onAccessTokenFetched(r.data.accessToken)
+              this.onAccessTokenFetched(r.data.token) // accessToken
             })
           }
           const retryOriginalRequest = new Promise(resolve => {
