@@ -74,7 +74,11 @@ router.afterEach(() => {
 
 router.beforeEach((to, from, next) => {
   if (to.meta.access) {
-    window.auth.refreshToken()
+    window.auth.refreshToken().then(res => {
+      window.auth.setToken(res.data.token)
+      window.auth.setRefreshToken(res.data.token)
+      localStorage.setItem('user', JSON.stringify(res.data.user))
+    })
     if (!window.auth.getToken()) {
       next({ name: 'login' })
     }
