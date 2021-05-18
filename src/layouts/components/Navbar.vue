@@ -30,9 +30,9 @@
         <template #button-content>
           <div class="d-sm-flex d-none user-nav">
             <p class="user-name font-weight-bolder mb-0">
-              John Doe
+              {{ user.name }}
             </p>
-            <span class="user-status">Admin</span>
+            <span class="user-status">{{ user.admin > 0 ? 'Admin' : 'User' }}</span>
           </div>
           <b-avatar
             size="40"
@@ -118,6 +118,11 @@ export default {
       type: Function,
       default: () => {},
     },
+  },
+  data() {
+    return {
+      user: JSON.parse(localStorage.getItem('user')),
+    }
   },
 }
 </script>
