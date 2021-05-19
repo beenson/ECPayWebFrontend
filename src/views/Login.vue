@@ -137,7 +137,7 @@
 
           <b-card-text class="text-center mt-2">
             <span>新來的? </span>
-            <b-link :to="{name:'page-auth-register-v2'}">
+            <b-link :to="{name:'register'}">
               <span>&nbsp;點我註冊!</span>
             </b-link>
           </b-card-text>

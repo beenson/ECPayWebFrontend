@@ -1,7 +1,7 @@
 export default {
   // Endpoints
   loginEndpoint: 'http://127.0.0.1:8080/user/login',
-  registerEndpoint: '/jwt/register',
+  registerEndpoint: 'http://127.0.0.1:8080/user/register',
   refreshEndpoint: 'http://127.0.0.1:8080/user/refreshToken',
   logoutEndpoint: '/jwt/logout',
 
