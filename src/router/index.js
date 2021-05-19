@@ -106,8 +106,13 @@ router.beforeEach((to, from, next) => {
     if (!useJwt.getToken()) {
       next({ name: 'login' })
     }
+    next()
+  } else {
+    if (useJwt.getToken()) {
+      next({ name: 'home' })
+    }
+    next()
   }
-  next()
 })
 
 export default router
