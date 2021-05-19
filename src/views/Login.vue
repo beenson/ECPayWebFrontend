@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          Vuexy
+          {{ appName }}
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -41,10 +41,10 @@
             title-tag="h2"
             class="font-weight-bold mb-1"
           >
-            Welcome to Vuexy! 👋
+            {{ appName }}! 👋
           </b-card-title>
           <b-card-text class="mb-2">
-            Please sign-in to your account and start the adventure
+            請先登入會員~
           </b-card-text>
 
           <!-- form -->
@@ -55,7 +55,7 @@
             >
               <!-- email -->
               <b-form-group
-                label="Email"
+                label="信箱"
                 label-for="login-email"
               >
                 <validation-provider
@@ -68,7 +68,7 @@
                     v-model="userEmail"
                     :state="errors.length > 0 ? false:null"
                     name="login-email"
-                    placeholder="john@example.com"
+                    placeholder="kjy@ntut.edu.tw"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -77,9 +77,9 @@
               <!-- forgot password -->
               <b-form-group>
                 <div class="d-flex justify-content-between">
-                  <label for="login-password">Password</label>
+                  <label for="login-password">密碼</label>
                   <b-link :to="{name:'auth-forgot-password-v2'}">
-                    <small>Forgot Password?</small>
+                    <small>忘記密碼?</small>
                   </b-link>
                 </div>
                 <validation-provider
@@ -119,7 +119,7 @@
                   v-model="status"
                   name="checkbox-1"
                 >
-                  Remember Me
+                  記住我!
                 </b-form-checkbox>
               </b-form-group>
 
@@ -130,22 +130,22 @@
                 block
                 @click="validationForm"
               >
-                Sign in
+                登入
               </b-button>
             </b-form>
           </validation-observer>
 
           <b-card-text class="text-center mt-2">
-            <span>New on our platform? </span>
+            <span>新來的? </span>
             <b-link :to="{name:'page-auth-register-v2'}">
-              <span>&nbsp;Create an account</span>
+              <span>&nbsp;點我註冊!</span>
             </b-link>
           </b-card-text>
 
           <!-- divider -->
           <div class="divider my-2">
             <div class="divider-text">
-              or
+              以下不適用
             </div>
           </div>
 
@@ -195,6 +195,7 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import querystring from 'querystring'
+import { $themeConfig } from '@themeConfig'
 
 export default {
   components: {
@@ -216,6 +217,14 @@ export default {
     ValidationObserver,
   },
   mixins: [togglePasswordVisibility],
+  setup() {
+    // App Name
+    const { appName, appLogoImage } = $themeConfig.app
+    return {
+      appName,
+      appLogoImage,
+    }
+  },
   data() {
     return {
       status: '',
