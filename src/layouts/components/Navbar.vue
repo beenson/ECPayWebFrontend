@@ -32,7 +32,7 @@
             <p class="user-name font-weight-bolder mb-0">
               {{ user.name }}
             </p>
-            <span class="user-status">{{ user.admin > 0 ? 'Admin' : 'User' }}</span>
+            <span class="user-status">{{ user.admin > 0 ? '管理員' : '使用者' }}</span>
           </div>
           <b-avatar
             size="40"
@@ -44,40 +44,25 @@
           />
         </template>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          :to="{ name: 'profile' }"
+        >
           <feather-icon
             size="16"
             icon="UserIcon"
             class="mr-50"
           />
-          <span>Profile</span>
+          <span>個人資料</span>
         </b-dropdown-item>
 
         <b-dropdown-item link-class="d-flex align-items-center">
           <feather-icon
             size="16"
-            icon="MailIcon"
+            icon="ShoppingCartIcon"
             class="mr-50"
           />
-          <span>Inbox</span>
-        </b-dropdown-item>
-
-        <b-dropdown-item link-class="d-flex align-items-center">
-          <feather-icon
-            size="16"
-            icon="CheckSquareIcon"
-            class="mr-50"
-          />
-          <span>Task</span>
-        </b-dropdown-item>
-
-        <b-dropdown-item link-class="d-flex align-items-center">
-          <feather-icon
-            size="16"
-            icon="MessageSquareIcon"
-            class="mr-50"
-          />
-          <span>Chat</span>
+          <span>我的訂單</span>
         </b-dropdown-item>
 
         <b-dropdown-divider />
@@ -91,7 +76,7 @@
             icon="LogOutIcon"
             class="mr-50"
           />
-          <span>Logout</span>
+          <span>登出</span>
         </b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>

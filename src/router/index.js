@@ -41,9 +41,18 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/auth/Profile.vue'),
+      meta: {
+        pageTitle: '個人資料',
+        access: 'user',
+      },
+    },
+    {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/Login.vue'),
+      component: () => import('@/views/auth/Login.vue'),
       meta: {
         layout: 'full',
       },
@@ -51,7 +60,7 @@ const router = new VueRouter({
     {
       path: '/register',
       name: 'register',
-      component: () => import('@/views/Register.vue'),
+      component: () => import('@/views/auth/Register.vue'),
       meta: {
         layout: 'full',
       },
@@ -83,18 +92,18 @@ router.afterEach(() => {
 
 router.beforeEach((to, from, next) => {
   if (to.meta.access) {
-    window.auth.refreshToken().then(res => {
+    useJwt.refreshToken().then(res => {
       if (res.data.error) {
         localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
         localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
         localStorage.removeItem('user')
       } else {
-        window.auth.setToken(res.data.token)
-        window.auth.setRefreshToken(res.data.token)
+        useJwt.setToken(res.data.token)
+        useJwt.setRefreshToken(res.data.token)
         localStorage.setItem('user', JSON.stringify(res.data.user))
       }
     })
-    if (!window.auth.getToken()) {
+    if (!useJwt.getToken()) {
       next({ name: 'login' })
     }
   }

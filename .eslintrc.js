@@ -17,5 +17,6 @@ module.exports = {
     camelcase: ['error', { properties: 'never', ignoreDestructuring: true, ignoreImports: true }],
     'arrow-parens': ['error', 'as-needed'],
     'vue/multiline-html-element-content-newline': 'off',
+    "vue/no-unused-components": 'off',
   },
 }

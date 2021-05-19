@@ -196,6 +196,7 @@ import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import querystring from 'querystring'
 import { $themeConfig } from '@themeConfig'
+import useJwt from '@/auth/jwt/useJwt'
 
 export default {
   components: {
@@ -253,7 +254,7 @@ export default {
     validationForm() {
       this.$refs.loginValidation.validate().then(success => {
         if (success) {
-          window.auth.login(querystring.stringify({
+          useJwt.login(querystring.stringify({
             email: this.userEmail,
             password: this.password,
           })).then(res => {
@@ -267,8 +268,8 @@ export default {
                 },
               })
             } else {
-              window.auth.setToken(res.data.token)
-              window.auth.setRefreshToken(res.data.token)
+              useJwt.setToken(res.data.token)
+              useJwt.setRefreshToken(res.data.token)
               localStorage.setItem('user', JSON.stringify(res.data.user))
               this.$router.replace('/').then(() => {
                 this.$toast({
