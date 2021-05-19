@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import useJwt from '@/auth/jwt/useJwt'
 
 Vue.use(VueRouter)
 // 註解 -- 路由器
@@ -83,9 +84,15 @@ router.afterEach(() => {
 router.beforeEach((to, from, next) => {
   if (to.meta.access) {
     window.auth.refreshToken().then(res => {
-      window.auth.setToken(res.data.token)
-      window.auth.setRefreshToken(res.data.token)
-      localStorage.setItem('user', JSON.stringify(res.data.user))
+      if (res.data.error) {
+        localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
+        localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
+        localStorage.removeItem('user')
+      } else {
+        window.auth.setToken(res.data.token)
+        window.auth.setRefreshToken(res.data.token)
+        localStorage.setItem('user', JSON.stringify(res.data.user))
+      }
     })
     if (!window.auth.getToken()) {
       next({ name: 'login' })

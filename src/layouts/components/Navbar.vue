@@ -82,7 +82,10 @@
 
         <b-dropdown-divider />
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          @click="logout"
+        >
           <feather-icon
             size="16"
             icon="LogOutIcon"
@@ -100,6 +103,8 @@ import {
   BLink, BNavbarNav, BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import useJwt from '@/auth/jwt/useJwt'
 
 export default {
   components: {
@@ -123,6 +128,23 @@ export default {
     return {
       user: JSON.parse(localStorage.getItem('user')),
     }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
+      localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
+      localStorage.removeItem('user')
+      this.$router.push({ name: 'login' }).then(() => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'GoodBye~',
+            icon: 'EditIcon',
+            variant: 'primary',
+          },
+        })
+      })
+    },
   },
 }
 </script>
