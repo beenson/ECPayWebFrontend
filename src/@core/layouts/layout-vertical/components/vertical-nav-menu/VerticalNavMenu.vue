@@ -134,7 +134,7 @@ export default {
     const { appName, appLogoImage } = $themeConfig.app
 
     return {
-      navMenuItems,
+      navMenuItems: navMenuItems(),
       perfectScrollbarSettings,
       isVerticalMenuCollapsed,
       collapseTogglerIcon,

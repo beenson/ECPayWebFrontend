@@ -90,29 +90,24 @@ router.afterEach(() => {
   }
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.access) {
-    useJwt.refreshToken().then(res => {
-      if (res.data.error) {
-        localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
-        localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
-        localStorage.removeItem('user')
-      } else {
-        useJwt.setToken(res.data.token)
-        useJwt.setRefreshToken(res.data.token)
-        localStorage.setItem('user', JSON.stringify(res.data.user))
-      }
-    })
-    if (!useJwt.getToken()) {
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.access === 'user') {
+    if (useJwt.getToken() !== 'undefined' && useJwt.getToken() !== undefined && useJwt.getToken() !== null) {
+      await useJwt.refreshToken().then(res => {
+        if (res.data.token) {
+          next()
+        }
+      })
+    } else {
       next({ name: 'login' })
     }
-    next()
-  } else {
-    if (useJwt.getToken()) {
-      next({ name: 'home' })
-    }
-    next()
+    return
   }
+  if (useJwt.getToken() !== 'undefined' && useJwt.getToken() !== undefined && useJwt.getToken() !== null) {
+    next({ name: 'home' })
+    return
+  }
+  next()
 })
 
 export default router

@@ -42,8 +42,9 @@ export default class JwtService {
         const { config, response } = error
         const originalRequest = config
 
-        this.setRefreshToken()
-        this.setToken()
+        localStorage.removeItem(this.jwtConfig.storageTokenKeyName)
+        localStorage.removeItem(this.jwtConfig.storageRefreshTokenKeyName)
+        localStorage.removeItem('user')
         window.vue.$router.replace('/login').then(() => {
           window.vue.$toast({
             component: ToastificationContent,
