@@ -1,5 +1,7 @@
 // 註解 -- 左邊的選單區
-export default function () {
+import useJwt from '@/auth/jwt/useJwt'
+
+export default async function () {
   const menu = [
     {
       title: '首頁Home',
@@ -12,12 +14,16 @@ export default function () {
       icon: 'FileIcon',
     },
   ]
-  menu.push(
-    {
-      title: 'Second Page222',
-      route: 'second-page',
-      icon: 'FileIcon',
-    },
-  )
+  await useJwt.axiosIns.post('http://127.0.0.1:8080/category/categorys').then(res => {
+    const list = res.data
+    list.sort((a, b) => b.priority - a.priority) // 排序 => priority越大越前面
+    list.forEach(category => {
+      menu.push({
+        title: category.name,
+        route: 'category.name',
+        icon: 'FileIcon',
+      })
+    })
+  })
   return menu
 }

@@ -134,7 +134,7 @@ export default {
     const { appName, appLogoImage } = $themeConfig.app
 
     return {
-      navMenuItems: navMenuItems(),
+      // navMenuItems: await navMenuItems(),
       perfectScrollbarSettings,
       isVerticalMenuCollapsed,
       collapseTogglerIcon,
@@ -153,6 +153,17 @@ export default {
       appName,
       appLogoImage,
     }
+  },
+  data() {
+    this.initMenuItems()
+    return {
+      navMenuItems: [],
+    }
+  },
+  methods: {
+    async initMenuItems() {
+      this.navMenuItems = await navMenuItems()
+    },
   },
 }
 </script>
