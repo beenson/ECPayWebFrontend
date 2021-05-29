@@ -4,7 +4,10 @@
     class="h-100"
     :class="[skinClasses]"
   >
-    <component :is="layout">
+    <component
+      :is="layout"
+      :key="$route.fullPath"
+    >
       <router-view />
     </component>
 

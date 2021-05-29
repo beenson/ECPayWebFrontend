@@ -45,10 +45,11 @@ const router = new VueRouter({
       name: 'category',
       component: () => import('@/views/category/category.vue'),
       meta: {
+        contentClass: 'ecommerce-application',
         pageTitle: 'Category Page',
         breadcrumb: [
           {
-            text: 'Second Page',
+            text: '商品分類',
             active: true,
           },
         ],

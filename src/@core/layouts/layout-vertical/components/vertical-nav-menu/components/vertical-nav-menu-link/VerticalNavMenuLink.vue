@@ -48,7 +48,6 @@ export default {
     const { isActive, linkProps, updateIsActive } = useVerticalNavMenuLink(props.item)
     const { t } = useI18nUtils()
     const { canViewVerticalNavMenuLink } = useAclUtils()
-
     return {
       isActive,
       linkProps,

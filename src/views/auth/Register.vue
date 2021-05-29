@@ -210,6 +210,7 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { $themeConfig } from '@themeConfig'
 import querystring from 'querystring'
+import useJwt from '@/auth/jwt/useJwt'
 
 export default {
   components: {
@@ -261,7 +262,7 @@ export default {
     validationForm() {
       this.$refs.registerForm.validate().then(success => {
         if (success) {
-          window.auth.register(querystring.stringify({
+          useJwt.register(querystring.stringify({
             email: this.regEmail,
             password: this.password,
             name: this.username,

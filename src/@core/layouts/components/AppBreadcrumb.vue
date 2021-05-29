@@ -3,7 +3,6 @@
     v-if="$route.meta.breadcrumb || $route.meta.pageTitle"
     class="content-header"
   >
-
     <!-- Content Left -->
     <b-col
       class="content-header-left mb-2"
@@ -13,7 +12,7 @@
       <b-row class="breadcrumbs-top">
         <b-col cols="12">
           <h2 class="content-header-title float-left pr-1 mb-0">
-            {{ $route.meta.pageTitle }}
+            {{ pageTitle }}
           </h2>
           <div class="breadcrumb-wrapper">
             <b-breadcrumb>
@@ -25,7 +24,7 @@
                 />
               </b-breadcrumb-item>
               <b-breadcrumb-item
-                v-for="item in $route.meta.breadcrumb"
+                v-for="item in breadcrumb"
                 :key="item.text"
                 :active="item.active"
                 :to="item.to"
@@ -115,6 +114,25 @@ export default {
     BDropdown,
     BDropdownItem,
     BButton,
+  },
+  data() {
+    return {
+      pageTitle: this.$route.meta.pageTitle,
+      breadcrumb: this.$route.meta.breadcrumb,
+    }
+  },
+  created() {
+    this.update()
+    window.updateBreadcrumb = this.update
+  },
+  methods: {
+    update() {
+      if (this.$route.meta) {
+        this.pageTitle = this.$route.meta.pageTitle
+        this.breadcrumb = this.$route.meta.breadcrumb
+      }
+      this.$forceUpdate()
+    },
   },
 }
 </script>
