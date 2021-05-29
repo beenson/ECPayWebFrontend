@@ -41,6 +41,21 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/category/:id',
+      name: 'category',
+      component: () => import('@/views/category/category.vue'),
+      meta: {
+        pageTitle: 'Category Page',
+        breadcrumb: [
+          {
+            text: 'Second Page',
+            active: true,
+          },
+        ],
+        access: 'user',
+      },
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: () => import('@/views/auth/Profile.vue'),

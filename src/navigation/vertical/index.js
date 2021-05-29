@@ -20,7 +20,10 @@ export default async function () {
     list.forEach(category => {
       menu.push({
         title: category.name,
-        route: 'category.name',
+        route: {
+          name: 'category',
+          params: { id: category.id },
+        },
         icon: 'FileIcon',
       })
     })
