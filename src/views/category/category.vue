@@ -114,14 +114,23 @@
               </h6>
             </div>
           </div>
-          <h6 class="item-name">
-            <b-link
-              class="text-body"
-              :to="{ name: 'apps-e-commerce-product-details', params: { slug: product.slug } }"
-            >
-              {{ product.name }}
-            </b-link>
-          </h6>
+          <div class="item-wrapper">
+            <div>
+              <h6 class="item-name">
+                <b-link
+                  class="text-body"
+                  :to="{ name: 'apps-e-commerce-product-details', params: { slug: product.slug } }"
+                >
+                  {{ product.name }}
+                </b-link>
+              </h6>
+            </div>
+            <div>
+              <h6 class="item-name text-body">
+                已售出 {{ product.sellAmount }}個
+              </h6>
+            </div>
+          </div>
           <b-card-text class="item-description">
             {{ product.description }}
           </b-card-text>
