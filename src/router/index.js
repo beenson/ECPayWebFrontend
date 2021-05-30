@@ -57,6 +57,22 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/product/:id',
+      name: 'product',
+      component: () => import('@/views/category/category.vue'),
+      meta: {
+        contentClass: 'ecommerce-application',
+        pageTitle: 'Product Page',
+        breadcrumb: [
+          {
+            text: '商品分類',
+            active: true,
+          },
+        ],
+        access: 'user',
+      },
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: () => import('@/views/auth/Profile.vue'),

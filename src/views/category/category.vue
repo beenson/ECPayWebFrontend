@@ -79,7 +79,7 @@
         no-body
       >
         <div class="item-img text-center">
-          <b-link :to="{ name: 'apps-e-commerce-product-details', params: { slug: product.slug } }">
+          <b-link :to="{ name: 'product', params: { id: product.id } }">
             <b-img
               :alt="`${product.name}-${product.id}`"
               fluid
@@ -119,15 +119,24 @@
               <h6 class="item-name">
                 <b-link
                   class="text-body"
-                  :to="{ name: 'apps-e-commerce-product-details', params: { slug: product.slug } }"
+                  :to="{ name: 'product', params: { id: product.id } }"
                 >
                   {{ product.name }}
                 </b-link>
               </h6>
             </div>
             <div>
-              <h6 class="item-name text-body">
+              <h6
+                v-show="product.sellAmount>0"
+                class="item-name text-body"
+              >
                 已售出 {{ product.sellAmount }}個
+              </h6>
+              <h6
+                v-show="product.sellAmount<=0"
+                class="item-name text-body"
+              >
+                未有售出紀錄
               </h6>
             </div>
           </div>
