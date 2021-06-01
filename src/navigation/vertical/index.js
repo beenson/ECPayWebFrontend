@@ -28,5 +28,21 @@ export default async function () {
       })
     })
   })
+  const user = JSON.parse(localStorage.getItem('user'))
+  if (user?.admin > 0) {
+    menu.push({
+      title: '後台管理',
+      icon: 'FileIcon',
+      children: [
+        {
+          title: '會員管理',
+          route: {
+            name: 'admin.users',
+          },
+          icon: 'FileIcon',
+        },
+      ],
+    })
+  }
   return menu
 }

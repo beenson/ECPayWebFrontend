@@ -82,6 +82,31 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/admin',
+      component: () => import('@/views/admin/base.vue'),
+      children: [
+        {
+          path: 'users',
+          name: 'admin.users',
+          component: () => import('@/views/admin/users.vue'),
+          meta: {
+            pageTitle: '會員管理',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '會員管理',
+                active: true,
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/auth/Login.vue'),
@@ -123,10 +148,15 @@ router.afterEach(() => {
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (to.meta.access === 'user') {
+  if (to.meta.access === 'user' || to.meta.access === 'admin') {
     if (useJwt.getToken() !== 'undefined' && useJwt.getToken() !== undefined && useJwt.getToken() !== null) {
       await useJwt.refreshToken().then(res => {
         if (res.data.token) {
+          if (to.meta.access === 'admin') {
+            if (res.data.user.admin <= 0) {
+              next({ name: 'error-404' })
+            }
+          }
           next()
         }
       })
