@@ -9,7 +9,7 @@
         <b-form-group
           class="mb-0"
         >
-          <label class="d-inline-block text-sm-left mr-50">Per page</label>
+          <label class="d-inline-block text-sm-left mr-50">顯示比數</label>
           <b-form-select
             id="perPageSelect"
             v-model="perPage"
@@ -25,8 +25,8 @@
         class="my-1"
       >
         <b-form-group
-          label="Sort"
-          label-cols-sm="3"
+          label="排序"
+          label-cols-sm="2"
           label-align-sm="right"
           label-size="sm"
           label-for="sortBySelect"
@@ -52,10 +52,10 @@
               class="w-25"
             >
               <option :value="false">
-                Asc
+                升冪
               </option>
               <option :value="true">
-                Desc
+                降冪
               </option>
             </b-form-select>
           </b-input-group>
@@ -66,7 +66,7 @@
         class="my-1"
       >
         <b-form-group
-          label="Filter"
+          label="搜尋"
           label-cols-sm="3"
           label-align-sm="right"
           label-size="sm"
@@ -78,14 +78,15 @@
               id="filterInput"
               v-model="filter"
               type="search"
-              placeholder="Type to Search"
+              placeholder="請輸入關鍵字"
             />
             <b-input-group-append>
               <b-button
+                variant="primary"
                 :disabled="!filter"
                 @click="filter = ''"
               >
-                Clear
+                清除
               </b-button>
             </b-input-group-append>
           </b-input-group>
@@ -97,6 +98,7 @@
           striped
           hover
           responsive
+          selectable
           :per-page="perPage"
           :current-page="currentPage"
           :items="items"
@@ -107,6 +109,7 @@
           :filter="filter"
           :filter-included-fields="filterOn"
           @filtered="onFiltered"
+          @row-selected="onRowSelected"
         >
           <template #cell(avatar)="data">
             <b-avatar :src="data.value" />
@@ -117,6 +120,7 @@
               {{ status[0][data.value] }}
             </b-badge>
           </template>
+
         </b-table>
       </b-col>
 
@@ -232,6 +236,9 @@ export default {
         }
         this.items = res.data
       })
+    },
+    onRowSelected(items) {
+      this.$router.push({ name: 'admin.user', params: { id: items[0].id } })
     },
   },
 }

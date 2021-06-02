@@ -53,7 +53,6 @@
               <b-form-input
                 id="email"
                 v-model="userData.email"
-                readonly
                 type="email"
               />
             </b-form-group>
@@ -75,54 +74,43 @@
             </b-form-group>
           </b-col>
 
-          <!-- Field: oldPwd -->
+          <!-- Field: password -->
           <b-col
             cols="12"
             md="4"
           >
             <b-form-group
-              label="舊密碼"
-              label-for="oldpwd"
+              label="密碼"
+              label-for="password"
             >
               <b-form-input
-                id="oldpwd"
-                v-model="oldPassword"
+                id="password"
+                v-model="password"
                 type="password"
               />
             </b-form-group>
           </b-col>
 
-          <!-- Field: newPwd -->
+          <!-- Field: admin -->
           <b-col
             cols="12"
             md="4"
           >
             <b-form-group
-              label="新密碼"
-              label-for="newPwd"
+              label="權限"
+              label-for="admin"
             >
-              <b-form-input
-                id="newPwd"
-                v-model="newPassword"
-                type="password"
-              />
-            </b-form-group>
-          </b-col>
-
-          <!-- Field: newPwd2 -->
-          <b-col
-            cols="12"
-            md="4"
-          >
-            <b-form-group
-              label="再次輸入新密碼"
-              label-for="newPwd2"
-            >
-              <b-form-input
-                id="newPwd2"
-                v-model="newPassword2"
-                type="password"
-              />
+              <b-form-select
+                id="admin"
+                v-model="userData.admin"
+              >
+                <option :value="0">
+                  會員
+                </option>
+                <option :value="1">
+                  管理員
+                </option>
+              </b-form-select>
             </b-form-group>
           </b-col>
 
@@ -181,10 +169,9 @@
 
 <script>
 import {
-  BButton, BMedia, BAvatar, BRow, BCol, BFormGroup, BFormInput, BForm, BTable, BCard, BCardHeader, BCardTitle, BFormCheckbox,
+  BButton, BMedia, BAvatar, BRow, BCol, BFormSelect, BFormGroup, BFormInput, BForm, BTable, BCard, BCardHeader, BCardTitle, BFormCheckbox,
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
-// import vSelect from 'vue-select'
 import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { ref } from '@vue/composition-api'
@@ -200,6 +187,7 @@ export default {
     BCol,
     BFormGroup,
     BFormInput,
+    BFormSelect,
     BForm,
     BTable,
     BCard,
@@ -229,21 +217,38 @@ export default {
   },
   data() {
     return {
-      userData: JSON.parse(localStorage.getItem('user')),
+      id: this.$router.currentRoute.params.id,
+      userData: {
+        admin: 0,
+        email: '',
+        id: 0,
+        name: '',
+        phone: '',
+      },
       userDataOri: JSON.parse(localStorage.getItem('user')),
-      oldPassword: '',
-      newPassword: '',
-      newPassword2: '',
+      password: '',
     }
+  },
+  created() {
+    this.loadUser()
   },
   methods: {
     reset() {
       this.userData.name = this.userDataOri.name
       this.userData.email = this.userDataOri.email
       this.userData.phone = this.userDataOri.phone
-      this.oldPassword = ''
-      this.newPassword = ''
-      this.newPassword2 = ''
+      this.userData.admin = this.userDataOri.admin
+      this.password = ''
+    },
+    loadUser() {
+      useJwt.axiosIns.post(`http://127.0.0.1:8080/user/admin/user/${this.id}`).then(res => {
+        if (res.data.error) {
+          this.showToast(res.data.error, 'danger')
+          return
+        }
+        this.userData = res.data.user
+        this.userDataOri = JSON.parse(JSON.stringify(res.data.user))
+      })
     },
     submit() {
       let changePW = false
