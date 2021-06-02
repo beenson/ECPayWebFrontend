@@ -1,7 +1,6 @@
 <template>
   <b-card>
     <div>
-
       <!-- Media -->
       <b-media class="mb-2">
         <template #aside>
@@ -194,7 +193,6 @@ export default {
     BCardHeader,
     BCardTitle,
     BFormCheckbox,
-    // vSelect,
   },
   setup(props) {
     // ? Demo Purpose => Update image on click of update
@@ -252,24 +250,8 @@ export default {
     },
     submit() {
       let changePW = false
-      if (this.newPassword !== '') {
+      if (this.password !== '') {
         changePW = true
-      }
-      if (changePW && this.oldPassword === '') {
-        this.showToast('修改密碼必須先輸入舊密碼', 'danger')
-        return
-      }
-      if (changePW && this.newPassword2 === '') {
-        this.showToast('修改密碼必須輸入兩次新密碼', 'danger')
-        return
-      }
-      if (changePW && this.oldPassword === this.newPassword) {
-        this.showToast('新舊密碼不可相同', 'danger')
-        return
-      }
-      if (changePW && this.newPassword !== this.newPassword2) {
-        this.showToast('兩次輸入的密碼不一樣', 'danger')
-        return
       }
       if (this.userData.name === '') {
         this.showToast('請輸入名稱', 'danger')
@@ -279,15 +261,20 @@ export default {
         this.showToast('請輸入手機號碼', 'danger')
         return
       }
+      if (this.userData.email === '') {
+        this.showToast('請輸入信箱', 'danger')
+        return
+      }
       const body = {
         newPhone: this.userData.phone,
         newName: this.userData.name,
+        newEmail: this.userData.email,
+        newAdmin: this.userData.admin,
       }
       if (changePW) {
-        body.newPassword = this.newPassword
-        body.oldPassword = this.oldPassword
+        body.newPassword = this.password
       }
-      useJwt.axiosIns.post('http://127.0.0.1:8080/user/editProfile', querystring.stringify(body)).then(res => {
+      useJwt.axiosIns.post(`http://127.0.0.1:8080/user/admin/user/${this.id}/edit`, querystring.stringify(body)).then(res => {
         if (res.data.error) {
           this.showToast(res.data.error, 'danger')
           return
