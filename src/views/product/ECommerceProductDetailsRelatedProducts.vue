@@ -14,7 +14,10 @@
         v-for="(product,index) in relatedProducts"
         :key="index"
       >
-        <b-link>
+        <b-link
+          :replace="true"
+          :to="{ name: 'product', params: { id: product.id } }"
+        >
           <div class="item-heading">
             <h5 class="text-truncate mb-0">
               {{ product.name }}

@@ -117,7 +117,6 @@
 </template>
 
 <script>
-import { useRouter } from '@core/utils/utils'
 import { ref } from '@vue/composition-api'
 import {
   BCard, BCardBody, BRow, BCol, BImg, BCardText, BLink, BButton, BDropdown, BDropdownItem, BAlert,
@@ -154,37 +153,31 @@ export default {
   setup() {
     const { handleCartActionClick, toggleProductInWishlist } = useEcommerceUi()
 
-    const product = ref(null)
-
-    // Remote Data
-    const fetchProduct = () => {
-      // Get product  id from URL
-      const { route } = useRouter()
-      const productSlug = route.value.params.id
-      const productId = productSlug.substring(productSlug.lastIndexOf('-') + 1)
-
-      useJwt.axiosIns.post(`http://127.0.0.1:8080/product/${productId}`).then(res => {
-        if (res.data.error) {
-          console.error(res.data.error)
-          return
-        }
-        product.value = res.data.product
-      })
-    }
-
     // UI
     const selectedColor = ref(null)
 
-    fetchProduct()
-
     return {
-      // Fetched Product
-      product,
       // UI
       selectedColor,
       handleCartActionClick,
       toggleProductInWishlist,
     }
+  },
+  data() {
+    return {
+      product: ref(null),
+    }
+  },
+  created() {
+    const productId = this.$router.currentRoute.params.id
+    console.log(this.product)
+    useJwt.axiosIns.post(`http://127.0.0.1:8080/product/${productId}`).then(res => {
+      if (res.data.error) {
+        console.error(res.data.error)
+        return
+      }
+      this.product = res.data.product
+    })
   },
   methods: {
     showToast(title, variant) {
