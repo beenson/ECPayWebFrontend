@@ -59,6 +59,15 @@ const router = new VueRouter({
     {
       path: '/product/:id',
       name: 'product',
+      component: () => import('@/views/product/product.vue'),
+      meta: {
+        pageTitle: '商品',
+        access: 'user',
+      },
+    },
+    {
+      path: '/product/:id',
+      name: 'product',
       component: () => import('@/views/category/category.vue'),
       meta: {
         contentClass: 'ecommerce-application',

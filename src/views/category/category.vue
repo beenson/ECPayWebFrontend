@@ -225,7 +225,7 @@ import { watch } from '@vue/composition-api'
 import router from '@/router'
 import Vue from 'vue'
 import { useShopFiltersSortingAndPagination, useShopUi, useShopRemoteData } from './shop'
-import { useEcommerceUi } from './useEcommerce'
+import { useEcommerceUi } from '../data/useEcommerce'
 
 export default {
   directives: {
