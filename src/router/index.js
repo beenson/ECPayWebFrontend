@@ -132,6 +132,44 @@ const router = new VueRouter({
             ],
           },
         },
+        {
+          path: 'product/:id',
+          name: 'admin.product',
+          component: () => import('@/views/admin/product.vue'),
+          meta: {
+            pageTitle: '商品管理',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '商品管理',
+                active: true,
+              },
+            ],
+          },
+        },
+        {
+          path: 'products',
+          name: 'admin.products',
+          component: () => import('@/views/admin/products.vue'),
+          meta: {
+            pageTitle: '商品管理',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '商品管理',
+                active: true,
+              },
+            ],
+          },
+        },
       ],
     },
     {
