@@ -42,7 +42,7 @@ export default async function () {
           icon: 'FileIcon',
         },
         {
-          title: '產品管理',
+          title: '商品管理',
           route: {
             name: 'admin.products',
           },
