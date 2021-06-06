@@ -18,5 +18,6 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     'vue/multiline-html-element-content-newline': 'off',
     "vue/no-unused-components": 'off',
+    "no-param-reassign": [2, { "props": false }]
   },
 }

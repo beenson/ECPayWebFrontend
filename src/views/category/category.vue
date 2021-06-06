@@ -177,7 +177,7 @@
               icon="ShoppingCartIcon"
               class="mr-50"
             />
-            <span>{{ product.isInCart ? 'View In Cart' : '加入購物車' }}</span>
+            <span>{{ product.isInCart ? '前往購物車' : '加入購物車' }}</span>
           </b-button>
         </div>
       </b-card>
@@ -221,11 +221,12 @@ import {
   BDropdown, BDropdownItem, BFormRadioGroup, BFormRadio, BRow, BCol, BInputGroup, BInputGroupAppend, BFormInput, BCard, BCardBody, BLink, BImg, BCardText, BButton, BPagination,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
-import { watch } from '@vue/composition-api'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import router from '@/router'
 import Vue from 'vue'
 import { useShopFiltersSortingAndPagination, useShopUi, useShopRemoteData } from './shop'
 import { useEcommerceUi } from '../data/useEcommerce'
+import ShoppingCart from '../auth/ShoppingCart'
 
 export default {
   directives: {
@@ -255,7 +256,7 @@ export default {
       filters, filterOptions, sortBy, sortByOptions,
     } = useShopFiltersSortingAndPagination()
 
-    const { handleCartActionClick, toggleProductInWishlist } = useEcommerceUi()
+    const { toggleProductInWishlist } = useEcommerceUi()
 
     const {
       itemView, itemViewOptions, totalProducts,
@@ -267,33 +268,9 @@ export default {
 
     const categoryId = router.currentRoute.params.id
 
-    let category = {}
+    const category = {}
 
     // Wrapper Function for `fetchProducts` which can be triggered initially and upon changes of filters
-    const fetchShopProducts = () => {
-      fetchProducts(categoryId).then(res => {
-        res.data.products.forEach((prod, i) => {
-          Vue.set(products, i, prod)
-        })
-        totalProducts.value = res.data.products.length
-        category = res.data.category
-        router.currentRoute.meta.pageTitle = category.name
-        router.currentRoute.meta.breadcrumb[1] = {
-          text: category.name,
-          active: true,
-        }
-        window.updateBreadcrumb()
-        console.log(products)
-      })
-    }
-
-    fetchShopProducts()
-
-    watch([filters, sortBy], () => {
-      fetchShopProducts()
-    }, {
-      deep: true,
-    })
 
     return {
       categoryId,
@@ -310,10 +287,10 @@ export default {
       itemViewOptions,
       totalProducts,
       toggleProductInWishlist,
-      handleCartActionClick,
 
       // useShopRemoteData
       products,
+      fetchProducts,
     }
   },
   data() {
@@ -321,10 +298,64 @@ export default {
       search: '',
     }
   },
+  created() {
+    this.fetchShopProducts()
+  },
   methods: {
     isPageItem(index) {
       const { filters } = this
       return (filters.page - 1) * filters.perPage <= index && filters.page * filters.perPage > index
+    },
+    isInCartCheck() {
+      const cart = ShoppingCart.get()
+      const list = []
+      this.isInCart = false
+      cart.forEach(item => {
+        list.push(item.id)
+      })
+      this.products.forEach(product => {
+        if (list.includes(product.id)) {
+          product.isInCart = true
+        } else {
+          product.isInCart = false
+        }
+      })
+    },
+    fetchShopProducts() {
+      this.fetchProducts(this.categoryId).then(res => {
+        res.data.products.forEach((prod, i) => {
+          Vue.set(this.products, i, prod)
+        })
+        this.isInCartCheck()
+        this.totalProducts = res.data.products.length
+        this.category = res.data.category
+        this.$router.currentRoute.meta.pageTitle = this.category.name
+        this.$router.currentRoute.meta.breadcrumb[1] = {
+          text: this.category.name,
+          active: true,
+        }
+        window.updateBreadcrumb()
+      })
+    },
+    handleCartActionClick(product) {
+      if (product.isInCart) {
+        console.log('TODO!')
+      } else {
+        ShoppingCart.add(product, 1)
+        Vue.set(product, 'isInCart', true)
+        this.$forceUpdate()
+        this.showToast('已加入購物車', 'success')
+      }
+    },
+    showToast(title, variant) {
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title,
+          icon: 'EditIcon',
+          variant,
+        },
+      })
     },
   },
 }

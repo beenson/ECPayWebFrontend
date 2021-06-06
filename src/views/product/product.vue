@@ -96,7 +96,7 @@
                     icon="ShoppingCartIcon"
                     class="mr-50"
                   />
-                  <span>{{ product.isInCart ? '前往購物車' : '加入購物車' }}</span>
+                  <span>{{ isInCart ? '前往購物車' : '加入購物車' }}</span>
                 </b-button>
               </div>
             </b-col>
@@ -127,6 +127,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import ECommerceProductDetailsItemFeatures from './ECommerceProductDetailsItemFeatures.vue'
 import ECommerceProductDetailsRelatedProducts from './ECommerceProductDetailsRelatedProducts.vue'
 import { useEcommerceUi } from '../data/useEcommerce'
+import ShoppingCart from '../auth/ShoppingCart'
 
 export default {
   directives: {
@@ -151,7 +152,7 @@ export default {
     ECommerceProductDetailsRelatedProducts,
   },
   setup() {
-    const { handleCartActionClick, toggleProductInWishlist } = useEcommerceUi()
+    const { toggleProductInWishlist } = useEcommerceUi()
 
     // UI
     const selectedColor = ref(null)
@@ -159,24 +160,24 @@ export default {
     return {
       // UI
       selectedColor,
-      handleCartActionClick,
       toggleProductInWishlist,
     }
   },
   data() {
     return {
       product: ref(null),
+      isInCart: false,
     }
   },
   created() {
     const productId = this.$router.currentRoute.params.id
-    console.log(this.product)
     useJwt.axiosIns.post(`http://127.0.0.1:8080/product/${productId}`).then(res => {
       if (res.data.error) {
         console.error(res.data.error)
         return
       }
       this.product = res.data.product
+      this.isInCartCheck()
     })
   },
   methods: {
@@ -189,6 +190,24 @@ export default {
           variant,
         },
       })
+    },
+    isInCartCheck() {
+      const cart = ShoppingCart.get()
+      this.isInCart = false
+      cart.forEach(product => {
+        if (product.id === this.product.id) {
+          this.isInCart = true
+        }
+      })
+    },
+    handleCartActionClick() {
+      if (this.isInCart) {
+        console.log('TODO!')
+      } else {
+        ShoppingCart.add(this.product, 1)
+        this.isInCart = true
+        this.showToast('已加入購物車', 'success')
+      }
     },
   },
 }
