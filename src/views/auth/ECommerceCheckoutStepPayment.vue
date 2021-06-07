@@ -1,5 +1,5 @@
 <template>
-  <div class="list-view product-checkout">
+  <div class="dark-layout list-view product-checkout">
 
     <!-- Left Card -->
     <b-card no-body>
@@ -15,23 +15,25 @@
         </h6>
 
         <!-- Radios -->
-        <b-form-group>
+        <b-form-radio-group>
           <hr class="mb-2 mt-1">
 
           <b-form-radio
+            v-model="type"
             name="payment-method"
-            value="debit-atm-credit-card"
+            value="1"
           >
             ATM
           </b-form-radio>
           <b-form-radio
+            v-model="type"
             name="payment-method"
             class="mt-1"
-            value="net-banking"
+            value="0"
           >
             超商代碼
           </b-form-radio>
-        </b-form-group>
+        </b-form-radio-group>
 
         <hr class="my-2">
         <b-row>
@@ -47,7 +49,7 @@
                 variant="success"
                 align="right"
                 block
-                @click="$emit('next-step')"
+                @click="onSubmit()"
               >
                 確認訂單
               </b-button>
@@ -97,13 +99,69 @@
 
       </b-card>
     </div>
+    <b-overlay
+      :show="busy"
+      no-wrap
+      @shown="onShown"
+      @hidden="onHidden"
+    >
+      <template v-slot:overlay>
+        <div
+          v-if="processing"
+          class="text-center p-4 bg-light text-light rounded"
+        >
+          <div class="mb-3">
+            訂單處理中...
+          </div>
+          <b-progress
+            min="1"
+            max="20"
+            :value="counter"
+            variant="success"
+            height="3px"
+            class="mx-n4 rounded-0"
+          />
+        </div>
+        <div
+          v-else
+          ref="dialog"
+          tabindex="-1"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="form-confirm-label"
+          class="text-center p-3"
+        >
+          <p><strong id="form-confirm-label">訂單送出後無法更改，確定嗎？</strong></p>
+          <div class="d-flex">
+            <b-button
+              v-ripple.400="'rgba(40, 199, 111, 0.15)'"
+              variant="outline-success"
+              class="mr-3"
+              @click="onOK"
+            >
+              確定
+            </b-button>
+            <b-button
+              v-ripple.400="'rgba(234, 84, 85, 0.15)'"
+              variant="outline-danger"
+              @click="onCancel"
+            >
+              再想想
+            </b-button>
+          </div>
+        </div>
+      </template>
+    </b-overlay>
   </div>
 </template>
 
 <script>
 import {
-  BRow, BCol, BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BFormGroup, BFormRadio, BFormInput, BButton,
+  BIcon, BProgress, BOverlay, BRow, BCol, BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BFormGroup, BFormRadio, BFormInput, BButton,
 } from 'bootstrap-vue'
+import useJwt from '@/auth/jwt/useJwt'
+import querystring from 'querystring'
+import Ripple from 'vue-ripple-directive'
 import ShoppingCart from './ShoppingCart'
 
 export default {
@@ -112,7 +170,10 @@ export default {
     BRow,
     BCol,
     BCard,
+    BIcon,
     BCardHeader,
+    BOverlay,
+    BProgress,
     BCardTitle,
     BCardText,
     BCardBody,
@@ -120,6 +181,9 @@ export default {
     BFormRadio,
     BFormInput,
     BButton,
+  },
+  directives: {
+    Ripple,
   },
   props: {
     paymentDetails: {
@@ -129,11 +193,20 @@ export default {
   },
   data() {
     return {
+      type: 0,
       total: 0,
+      busy: false,
+      processing: false,
+      counter: 1,
+      interval: null,
+      result: undefined,
     }
   },
   created() {
     this.getTotal()
+  },
+  beforeDestroy() {
+    this.clearInterval()
   },
   methods: {
     getTotal() {
@@ -144,14 +217,66 @@ export default {
       this.total = t
     },
     createOrder() {
-      // TODO
+      const list = []
+      ShoppingCart.get().forEach(item => {
+        list.push({
+          productId: item.id,
+          amount: item.amount,
+        })
+      })
+      useJwt.axiosIns.post('http://127.0.0.1:8080/order/create', querystring.stringify({
+        data: JSON.stringify(list),
+        type: 1,
+        bank: 'BOT',
+      })).then(res => {
+        this.result = res.data
+      })
+    },
+    clearInterval() {
+      if (this.interval) {
+        clearInterval(this.interval)
+        this.interval = null
+      }
+    },
+    onShown() {
+      // onShown
+    },
+    onHidden() {
+      // onHidden
+    },
+    onSubmit() {
+      console.log(this.type)
+      this.processing = false
+      this.busy = true
+    },
+    onCancel() {
+      this.busy = false
+    },
+    onOK() {
+      this.counter = 1
+      this.processing = true
+      // Simulate an async request
+      this.createOrder()
+      this.clearInterval()
+      this.interval = setInterval(() => {
+        if (this.counter < 20) {
+          this.counter += 1
+        } else if (this.result) {
+          this.clearInterval()
+          this.$nextTick(() => {
+            this.processing = false
+            this.busy = false
+          })
+          // TODO: result.order.id router
+        }
+      }, 350)
     },
   },
 }
 </script>
 
-<style lang="scss" scoped>
-#cvv {
-  width: auto;
+<style lang="css">
+.bg-light {
+  background-color: #161d31 !important;
 }
 </style>
