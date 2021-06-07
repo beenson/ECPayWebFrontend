@@ -143,6 +143,9 @@ export default {
       })
       this.total = t
     },
+    createOrder() {
+      // TODO
+    },
   },
 }
 </script>
