@@ -202,7 +202,7 @@ export default {
     },
     handleCartActionClick() {
       if (this.isInCart) {
-        console.log('TODO!')
+        this.$router.push({ name: 'cart' })
       } else {
         ShoppingCart.add(this.product, 1)
         this.isInCart = true

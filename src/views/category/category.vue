@@ -339,7 +339,7 @@ export default {
     },
     handleCartActionClick(product) {
       if (product.isInCart) {
-        console.log('TODO!')
+        this.$router.push({ name: 'cart' })
       } else {
         ShoppingCart.add(product, 1)
         Vue.set(product, 'isInCart', true)

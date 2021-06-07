@@ -82,13 +82,28 @@ const router = new VueRouter({
       },
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('@/views/auth/Profile.vue'),
-      meta: {
-        pageTitle: '個人資料',
-        access: 'user',
-      },
+      path: '/user',
+      component: () => import('@/views/auth/base.vue'),
+      children: [
+        {
+          path: '/profile',
+          name: 'profile',
+          component: () => import('@/views/auth/Profile.vue'),
+          meta: {
+            pageTitle: '個人資料',
+            access: 'user',
+          },
+        },
+        {
+          path: '/cart',
+          name: 'cart',
+          component: () => import('@/views/auth/ShoppingCart.vue'),
+          meta: {
+            pageTitle: '購物車',
+            access: 'user',
+          },
+        },
+      ],
     },
     {
       path: '/admin',

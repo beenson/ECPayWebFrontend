@@ -17,5 +17,17 @@ const ShoppingCart = {
     }
     return false
   },
+  remove(product) {
+    const list = this.get()
+    list.forEach((p, i) => {
+      if (p.id === product.id) {
+        list.splice(i, 1)
+        localStorage.setItem(this.key, JSON.stringify(list))
+      }
+    })
+  },
+  set(list) {
+    localStorage.setItem(this.key, JSON.stringify(list))
+  },
 }
 export default ShoppingCart
