@@ -86,7 +86,7 @@
             icon="XIcon"
             class="mr-50"
           />
-          <span>Remove</span>
+          <span>移除</span>
         </b-button>
       </div>
     </b-card>

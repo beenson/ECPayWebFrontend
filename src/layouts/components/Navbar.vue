@@ -56,6 +56,18 @@
           <span>個人資料</span>
         </b-dropdown-item>
 
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          :to="{ name: 'cart' }"
+        >
+          <feather-icon
+            size="16"
+            icon="ShoppingCartIcon"
+            class="mr-50"
+          />
+          <span>購物車</span>
+        </b-dropdown-item>
+
         <b-dropdown-item link-class="d-flex align-items-center">
           <feather-icon
             size="16"

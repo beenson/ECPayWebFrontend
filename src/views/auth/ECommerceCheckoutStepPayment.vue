@@ -24,7 +24,13 @@
             value="1"
           >
             ATM
+            <b-form-select
+              v-show="type==1"
+              v-model="atm"
+              :options="options"
+            />
           </b-form-radio>
+          <br class="mb-5 mt-5">
           <b-form-radio
             v-model="type"
             name="payment-method"
@@ -157,7 +163,7 @@
 
 <script>
 import {
-  BIcon, BProgress, BOverlay, BRow, BCol, BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BFormGroup, BFormRadio, BFormInput, BButton,
+  BIcon, BFormRadioGroup, BFormSelect, BProgress, BOverlay, BRow, BCol, BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BFormGroup, BFormRadio, BFormInput, BButton,
 } from 'bootstrap-vue'
 import useJwt from '@/auth/jwt/useJwt'
 import querystring from 'querystring'
@@ -169,6 +175,7 @@ export default {
     // BSV
     BRow,
     BCol,
+    BFormSelect,
     BCard,
     BIcon,
     BCardHeader,
@@ -179,6 +186,7 @@ export default {
     BCardBody,
     BFormGroup,
     BFormRadio,
+    BFormRadioGroup,
     BFormInput,
     BButton,
   },
@@ -200,6 +208,15 @@ export default {
       counter: 1,
       interval: null,
       result: undefined,
+      atm: 'BOT',
+      options: [
+        { value: 'BOT', text: '台灣銀行' },
+        { value: 'TAISHIN', text: '台新銀行' },
+        { value: 'CHINATRUST', text: '中國信託' },
+        { value: 'FIRST', text: '第一銀行' },
+        { value: 'LAND', text: '土地銀行' },
+        { value: 'TACHONG', text: '大眾銀行' },
+      ],
     }
   },
   created() {
@@ -227,7 +244,7 @@ export default {
       useJwt.axiosIns.post('http://127.0.0.1:8080/order/create', querystring.stringify({
         data: JSON.stringify(list),
         type: 1,
-        bank: 'BOT',
+        bank: this.atm,
       })).then(res => {
         this.result = res.data
       })
@@ -245,7 +262,6 @@ export default {
       // onHidden
     },
     onSubmit() {
-      console.log(this.type)
       this.processing = false
       this.busy = true
     },
