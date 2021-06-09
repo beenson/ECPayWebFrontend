@@ -283,6 +283,7 @@ export default {
             this.processing = false
             this.busy = false
           })
+          ShoppingCart.set([])
           // TODO: result.order.id router
         }
       }, 350)
