@@ -167,6 +167,29 @@ const router = new VueRouter({
           },
         },
         {
+          path: 'product/create',
+          name: 'admin.productCreate',
+          component: () => import('@/views/admin/product_create.vue'),
+          meta: {
+            pageTitle: '商品新增',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '商品管理',
+                active: true,
+              },
+              {
+                text: '商品新增',
+                active: true,
+              },
+            ],
+          },
+        },
+        {
           path: 'products',
           name: 'admin.products',
           component: () => import('@/views/admin/products.vue'),

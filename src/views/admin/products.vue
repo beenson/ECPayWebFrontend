@@ -1,5 +1,11 @@
 <template>
   <b-card>
+    <b-button
+      variant="primary"
+      @click="create"
+    >
+      新增商品
+    </b-button>
     <b-row>
       <b-col
         md="2"
@@ -249,7 +255,7 @@ export default {
             category: this.categories.find(x => x.value === item.categoryId).text,
             name: item.name,
             desc: item.desc,
-            onSell: item.onSell,
+            onSell: item.onSell ? '販售中' : '未販賣',
             price: item.price,
             sellAmount: item.sellAmount,
             storageAmount: item.storageAmount,
@@ -271,6 +277,9 @@ export default {
     },
     onRowSelected(items) {
       this.$router.push({ name: 'admin.product', params: { id: items[0].id, categories: this.categories } })
+    },
+    create() {
+      this.$router.push({ name: 'admin.productCreate', params: { categories: this.categories } })
     },
   },
 }
