@@ -22,6 +22,7 @@
             v-model="type"
             name="payment-method"
             value="1"
+            checked="true"
           >
             ATM
             <b-form-select
@@ -219,7 +220,10 @@ export default {
       ],
     }
   },
-  created() {
+  mounted() {
+    this.getTotal()
+  },
+  updated() {
     this.getTotal()
   },
   beforeDestroy() {
@@ -243,7 +247,7 @@ export default {
       })
       useJwt.axiosIns.post('http://127.0.0.1:8080/order/create', querystring.stringify({
         data: JSON.stringify(list),
-        type: 1,
+        type: this.type,
         bank: this.atm,
       })).then(res => {
         this.result = res.data

@@ -145,6 +145,9 @@ export default {
     updateCart() {
       ShoppingCart.set(this.products)
       this.$parent.getTotal(this.products)
+      if (this.$parent.$parent.$parent.$parent.refFormWizard) {
+        this.$parent.$parent.$parent.$parent.refFormWizard.tabs[2].$children[0].getTotal()
+      }
     },
   },
 }

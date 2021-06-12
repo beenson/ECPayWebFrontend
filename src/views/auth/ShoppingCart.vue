@@ -64,6 +64,7 @@ export default {
   setup() {
     const refFormWizard = ref(null)
     const formWizardNextStep = () => {
+      refFormWizard.value.tabs[2].$children[0].getTotal()
       refFormWizard.value.nextTab()
     }
 
