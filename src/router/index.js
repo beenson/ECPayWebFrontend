@@ -110,6 +110,25 @@ const router = new VueRouter({
       component: () => import('@/views/admin/base.vue'),
       children: [
         {
+          path: 'dashboard',
+          name: 'admin.dashboard',
+          component: () => import('@/views/admin/dashboard.vue'),
+          meta: {
+            pageTitle: '儀表板',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '後台統計',
+                active: true,
+              },
+            ],
+          },
+        },
+        {
           path: 'user/:id',
           name: 'admin.user',
           component: () => import('@/views/admin/user.vue'),
