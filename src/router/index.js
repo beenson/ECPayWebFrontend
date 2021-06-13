@@ -103,6 +103,24 @@ const router = new VueRouter({
             access: 'user',
           },
         },
+        {
+          path: '/orders',
+          name: 'orders',
+          component: () => import('@/views/auth/Orders.vue'),
+          meta: {
+            pageTitle: '我的訂單',
+            access: 'user',
+          },
+        },
+        {
+          path: '/order/:id',
+          name: 'order',
+          component: () => import('@/views/auth/Order.vue'),
+          meta: {
+            pageTitle: '我的訂單',
+            access: 'user',
+          },
+        },
       ],
     },
     {

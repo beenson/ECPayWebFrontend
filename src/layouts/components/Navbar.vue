@@ -68,7 +68,10 @@
           <span>購物車</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          :to="{ name: 'orders' }"
+        >
           <feather-icon
             size="16"
             icon="ShoppingCartIcon"

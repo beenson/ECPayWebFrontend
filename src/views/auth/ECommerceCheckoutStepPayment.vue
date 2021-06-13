@@ -288,7 +288,7 @@ export default {
             this.busy = false
           })
           ShoppingCart.set([])
-          // TODO: result.order.id router
+          this.$router.push({ name: 'order', params: { id: this.result.Order.id } })
         }
       }, 350)
     },
