@@ -269,7 +269,7 @@ export default {
       max-width: 20vw;
     }
   }
-  img {
+  td img {
     min-height: 4vh;
     min-width: 6vh;
   }
