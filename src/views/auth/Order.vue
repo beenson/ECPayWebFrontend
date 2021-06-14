@@ -112,15 +112,9 @@
         >
           <template #cell(picture)="data">
             <b-img
-              class="col-6"
+              class="col-12"
               :src="data.value"
             />
-          </template>
-
-          <template #cell(status)="data">
-            <b-badge :variant="status[1][data.value]">
-              {{ status[0][data.value] }}
-            </b-badge>
           </template>
         </b-table>
       </b-col>
@@ -265,5 +259,18 @@ export default {
 </script>
 
 <style>
-
+  @media (max-width: 679px) {
+    tbody tr td {
+      max-width: 100%;
+    }
+  }
+  @media (min-width: 680px) and (max-width: 4000px) {
+    tbody tr td {
+      max-width: 20vw;
+    }
+  }
+  img {
+    min-height: 4vh;
+    min-width: 6vh;
+  }
 </style>
