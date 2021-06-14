@@ -261,6 +261,7 @@ export default {
             storageAmount: item.storageAmount,
           })
         })
+        this.totalRows = this.items.length
       })
     },
     loadCategory() {
