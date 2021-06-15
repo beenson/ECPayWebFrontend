@@ -249,6 +249,7 @@ export default {
               amount: item.amount,
               productTot: p.price * item.amount,
             })
+            this.totalRows = this.items.length
           })
         })
       })
