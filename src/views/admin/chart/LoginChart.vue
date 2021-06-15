@@ -4,20 +4,34 @@
       <!-- title and subtitle -->
       <div>
         <b-card-title class="mb-1">
-          支付方式統計
+          登入趨勢
         </b-card-title>
-        <b-card-sub-title>統計各支付方式使用到的次數</b-card-sub-title>
+        <b-card-sub-title>每天的登入量統計</b-card-sub-title>
       </div>
       <!--/ title and subtitle -->
 
+      <!-- datepicker -->
+      <div class="d-flex align-items-center">
+        <feather-icon
+          icon="CalendarIcon"
+          size="16"
+        />
+        <flat-pickr
+          v-model="rangePicker"
+          :config="{ mode: 'range'}"
+          class="form-control flat-picker bg-transparent border-0 shadow-none"
+          placeholder="YYYY/MM/DD"
+          @input="onDateChange"
+        />
+      </div>
       <!-- datepicker -->
     </b-card-header>
 
     <b-card-body>
       <vue-apex-charts
         ref="realtimeChart"
-        type="bar"
-        height="350"
+        type="area"
+        height="400"
         :options="data.chartOptions"
         :series="data.series"
       />
@@ -32,6 +46,7 @@ import {
 import querystring from 'querystring'
 import useJwt from '@/auth/jwt/useJwt'
 import VueApexCharts from 'vue-apexcharts'
+import flatPickr from 'vue-flatpickr-component'
 import apexChatData from './apexChartData'
 
 export default {
@@ -42,12 +57,13 @@ export default {
     BCardBody,
     BCardTitle,
     BCardSubTitle,
+    flatPickr,
   },
   setup() {
-    const data = JSON.parse(JSON.stringify(apexChatData.barChart))
-    /* data.chartOptions.tooltip.custom = x => `${'<div class="px-1 py-50"><span>'}$${
+    const data = JSON.parse(JSON.stringify(apexChatData.lineChartSimple))
+    data.chartOptions.tooltip.custom = x => `${'<div class="px-1 py-50"><span>'}登入${
       x.series[x.seriesIndex][x.dataPointIndex]
-    }</span></div>` */
+    }次</span></div>`
 
     return {
       rangePicker: ['2021/06/09', '2021/06/13'],
@@ -92,33 +108,55 @@ export default {
       })
     },
     async loadRecord() {
+      let start = this.rangePicker[0]
+      let end = this.rangePicker[1]
+      if (this.rangePicker.length !== 2) {
+        [start, end] = this.rangePicker.split(' to ')
+      }
+      const dateIndex = this.getDateIndex(new Date(start), new Date(end))
+      const dateArray = this.getDateArray(new Date(start), new Date(end))
       // this.$set(, 'categories', dateArray)
-      await useJwt.axiosIns.post('http://127.0.0.1:8080/admin/getDefaultDayAnalysisRecord', querystring.stringify({
-        key: 'PAYMENT_',
+      await useJwt.axiosIns.post('http://127.0.0.1:8080/admin/getAnalysisRecord', querystring.stringify({
+        key: 'LOGINTIMES',
+        start,
+        end,
       })).then(res => {
         const list = res.data.record
-        const names = []
-        const values = []
+        const series = {}
+        const seriesArr = []
+        const keys = []
         list.forEach(data => {
           if (data.key === 'EARNINGS') {
             return
           }
-          let name = ''
-          if (data.key.includes('ATM')) {
-            name = `${this.getATMName(data.key.split('_')[2])}ATM`
-          } else {
-            name = '超商繳費'
+          const dataDate = `${data.date.split('-')[1]}/${data.date.split('-')[2]}`
+          if (!keys.includes(data.key)) {
+            keys.push(data.key)
           }
-          names.push(name)
-          values.push(data.value)
+          if (series[data.key] === undefined) {
+            series[data.key] = []
+          }
+          series[data.key][dateIndex[dataDate]] = data.value
         })
-        this.data.chartOptions.xaxis.categories = names
-        console.log(this.data.series)
-        this.data.series[0].data = values
-        this.$refs.realtimeChart.updateSeries(this.data.series, false, true)
+        keys.forEach(key => {
+          if (series[key] === undefined) {
+            series[key] = []
+          }
+          for (let i = 0; i < dateArray.length; i += 1) {
+            if (series[key][i] === undefined || series[key][i] === null) {
+              series[key][i] = 0
+            }
+          }
+          const cid = key.split('_')[1]
+          seriesArr.push({
+            name: this.getCategoryName(cid),
+            data: series[key],
+          })
+        })
+        this.data.chartOptions.xaxis.categories = dateArray
+        this.data.series = seriesArr
+        this.$refs.realtimeChart.updateSeries(seriesArr, false, true)
         this.$refs.realtimeChart.updateOptions(this.data.chartOptions, false, true)
-        console.log(this.data.chartOptions.xaxis.categories)
-        console.log(this.data.series.data)
       })
     },
     getDateIndex(start, to) {
@@ -169,24 +207,6 @@ export default {
         }
       })
       return c
-    },
-    getATMName(code) {
-      switch (parseInt(code, 10)) {
-        case 812:
-          return '台新'
-        case 4:
-          return '台銀'
-        case 822:
-          return '中信'
-        case 7:
-          return '第一'
-        case 5:
-          return '土地'
-        case 814:
-          return '大眾'
-        default:
-          return '未知'
-      }
     },
   },
 }

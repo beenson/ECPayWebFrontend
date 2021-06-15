@@ -20,7 +20,10 @@
       <sell-type-chart />
     </b-col>
     <b-col md="12">
-      <apex-bar-chart />
+      <payment-chart />
+    </b-col>
+    <b-col md="12">
+      <login-chart />
     </b-col>
   </b-row>
 </template>
@@ -30,7 +33,8 @@ import { BRow, BCol, BLink } from 'bootstrap-vue'
 
 import EarnTypeChart from './chart/EarnTypeChart.vue'
 import SellTypeChart from './chart/SellTypeChart.vue'
-import ApexBarChart from './chart/ApexBarChart.vue'
+import PaymentChart from './chart/PaymentChart.vue'
+import LoginChart from './chart/LoginChart.vue'
 
 export default {
   components: {
@@ -40,7 +44,8 @@ export default {
 
     EarnTypeChart,
     SellTypeChart,
-    ApexBarChart,
+    PaymentChart,
+    LoginChart,
   },
 }
 </script>
