@@ -233,6 +233,7 @@ export default {
             createAt: [date.getFullYear(), date.getMonth(), date.getDate()].join('/').concat(' ', [date.getHours(), date.getMinutes(), date.getSeconds()].map(ele => '0'.concat(ele).slice(-2)).join(':')),
           })
         })
+        this.totalRows = this.items.length
       })
     },
     onRowSelected(items) {
