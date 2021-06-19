@@ -1,143 +1,128 @@
 <template>
   <b-card>
-    <b-row>
-      <b-col
-        md="2"
-        sm="4"
-        class="my-1"
-      >
-        <b-form-group
-          class="mb-0"
-        >
-          <label class="d-inline-block text-sm-left mr-50">顯示比數</label>
-          <b-form-select
-            id="perPageSelect"
-            v-model="perPage"
-            size="sm"
-            :options="pageOptions"
-            class="w-50"
-          />
-        </b-form-group>
-      </b-col>
-      <b-col
-        md="4"
-        sm="8"
-        class="my-1"
-      >
-        <b-form-group
-          label="排序"
-          label-cols-sm="2"
-          label-align-sm="right"
-          label-size="sm"
-          label-for="sortBySelect"
-          class="mb-0"
-        >
-          <b-input-group size="sm">
-            <b-form-select
-              id="sortBySelect"
-              v-model="sortBy"
-              :options="sortOptions"
-              class="w-75"
-            >
-              <template v-slot:first>
-                <option value="">
-                  -- none --
-                </option>
-              </template>
-            </b-form-select>
-            <b-form-select
-              v-model="sortDesc"
-              size="sm"
-              :disabled="!sortBy"
-              class="w-25"
-            >
-              <option :value="false">
-                升冪
-              </option>
-              <option :value="true">
-                降冪
-              </option>
-            </b-form-select>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-      <b-col
-        md="6"
-        class="my-1"
-      >
-        <b-form-group
-          label="搜尋"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          label-for="filterInput"
-          class="mb-0"
-        >
-          <b-input-group size="sm">
-            <b-form-input
-              id="filterInput"
-              v-model="filter"
-              type="search"
-              placeholder="請輸入關鍵字"
-            />
-            <b-input-group-append>
-              <b-button
-                variant="primary"
-                :disabled="!filter"
-                @click="filter = ''"
-              >
-                清除
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
+    <b-card-body class="invoice-padding pb-0">
+      <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
 
-      <b-col cols="12">
-        <b-table
-          striped
-          hover
-          responsive
-          selectable
-          :per-page="perPage"
-          :current-page="currentPage"
-          :items="items"
-          :fields="fields"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :sort-direction="sortDirection"
-          :filter="filter"
-          :filter-included-fields="filterOn"
-          @filtered="onFiltered"
-        >
-          <template #cell(picture)="data">
-            <b-img
-              class="col-12"
-              :src="data.value"
-            />
-          </template>
-        </b-table>
-      </b-col>
+        <!-- Header: Left Content -->
+        <div class="logo-wrapper">
+          <h3 class="text-primary invoice-logo">
+            買爆
+          </h3>
+        </div>
 
+        <!-- Header: Right Content -->
+        <div class="mt-md-0 mt-2">
+          <h4 class="invoice-title">
+            order
+            <span class="invoice-number">#{{ id }}</span>
+          </h4>
+          <div class="invoice-date-wrapper">
+            <p class="invoice-date-title">
+              下訂日期:
+            </p>
+            <p class="invoice-date">
+              {{ orderDate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </b-card-body>
+
+    <!-- Spacer -->
+    <hr class="invoice-spacing">
+
+    <b-card-body
+      class="invoice-padding pt-0"
+    >
       <b-col
         cols="12"
+        xl="6"
+        class="p-0"
       >
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          align="center"
-          size="sm"
-          class="my-0"
-        />
+        <div>
+          <h6 class="mb-2">
+            付款資訊:
+          </h6>
+          <table>
+            <tbody>
+              <tr>
+                <td class="pr-1">
+                  狀態:
+                </td>
+                <td><span class="font-weight-bold">{{ status }}</span></td>
+              </tr>
+              <tr>
+                <td class="pr-1">
+                  付款方式:
+                </td>
+                <td><span class="font-weight-bold">{{ type }}</span></td>
+              </tr>
+              <tr>
+                <td class="pr-1">
+                  銀行:
+                </td>
+                <td>{{ bank }}</td>
+              </tr>
+              <tr>
+                <td class="pr-1">
+                  代碼:
+                </td>
+                <td>{{ code }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </b-col>
-    </b-row>
+    </b-card-body>
+
+    <b-table-lite
+      responsive
+      :items="items"
+      :fields="fields"
+    >
+      <template #cell(picture)="data">
+        <b-img
+          class="col-6"
+          :src="data.value"
+        />
+      </template>
+    </b-table-lite>
+
+    <!-- Invoice Description: Total -->
+    <b-card-body class="invoice-padding pb-0">
+      <b-row>
+        <!-- Col: Sales Persion -->
+        <b-col
+          cols="12"
+          md="6"
+          class="mt-md-0 mt-3"
+          order="2"
+          order-md="1"
+        />
+        <!-- Col: Total -->
+        <b-col
+          cols="12"
+          md="6"
+          class="mt-md-6 d-flex justify-content-end"
+          order="1"
+          order-md="2"
+        >
+          <div class="invoice-total-wrapper">
+            <div class="invoice-total-item">
+              <p class="invoice-total-title">
+                <strong>Total:{{ total }}</strong>
+              </p>
+            </div>
+          </div>
+        </b-col>
+      </b-row>
+    </b-card-body>
   </b-card>
 </template>
 
 <script>
 import {
-  BCard, BTable, BAvatar, BBadge, BRow, BCol, BFormGroup, BFormSelect, BPagination, BInputGroup, BFormInput, BInputGroupAppend, BButton, BImg,
+  BCard, BTable, BAvatar, BBadge, BRow, BCol, BFormGroup, BTableLite, BFormSelect, BPagination, BInputGroup, BFormInput, BInputGroupAppend, BButton, BImg,
 } from 'bootstrap-vue'
 import useJwt from '@/auth/jwt/useJwt'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -146,6 +131,7 @@ export default {
   components: {
     BCard,
     BTable,
+    BTableLite,
     BAvatar,
     BBadge,
     BRow,
@@ -163,15 +149,11 @@ export default {
   data() {
     return {
       id: this.$router.currentRoute.params.id,
-      perPage: 10,
-      pageOptions: [5, 10, 15, 20],
-      totalRows: 1,
-      currentPage: 1,
-      sortBy: '',
-      sortDesc: true,
-      sortDirection: 'asc',
-      filter: null,
-      filterOn: [],
+      orderDate: '2021/6/19',
+      status: '未付款',
+      type: '銀行',
+      bank: '--------',
+      code: '987987',
       infoModal: {
         id: 'info-modal',
         title: '',
@@ -233,6 +215,13 @@ export default {
           this.showToast(res.data.error, 'danger')
           return
         }
+        const timestamp = new Date(res.data.Order.createAt)
+        this.orderDate = [timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate()].join('/').concat(' ', [timestamp.getHours(), timestamp.getMinutes(), timestamp.getSeconds()].map(ele => '0'.concat(ele).slice(-2)).join(':'))
+        this.status = res.data.Payment.status
+        this.type = res.data.Payment.type
+        this.bank = res.data.Payment.bank === '' ? '------------' : res.data.Payment.bank
+        this.code = res.data.Payment.code
+        this.total = res.data.Order.price
         this.items = []
         res.data.OrderItems.forEach(item => {
           useJwt.axiosIns.post(`http://127.0.0.1:8080/product/${item.productId}`).then(pres => {
