@@ -115,15 +115,18 @@ export default {
     }
   },
   created() {
-    useJwt.axiosIns.post(`http://127.0.0.1:8080/category/${this.categoryId}/products`).then(res => {
-      if (res.data.error) {
-        console.error(res.data.error)
-        return
-      }
-      const relatedProducts = res.data.products
-      relatedProducts.sort((a, b) => b.sellAmount - a.sellAmount) // 排序 => sellAmount越大越前面
-      this.relatedProducts = relatedProducts.slice(0, 10) // 取售出量最高的前10個商品
-    })
+    setTimeout(() => {
+      this.categoryId = this.$parent.$data.product.categoryId
+      useJwt.axiosIns.post(`http://127.0.0.1:8080/category/${this.categoryId}/products`).then(res => {
+        if (res.data.error) {
+          console.error(res.data.error)
+          return
+        }
+        const relatedProducts = res.data.products
+        relatedProducts.sort((a, b) => b.sellAmount - a.sellAmount) // 排序 => sellAmount越大越前面
+        this.relatedProducts = relatedProducts.slice(0, 10) // 取售出量最高的前10個商品
+      })
+    }, 1000)
   },
 }
 </script>

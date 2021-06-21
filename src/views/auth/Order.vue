@@ -8,38 +8,6 @@
           <h3 class="text-primary invoice-logo">
             買爆
           </h3>
-        </div>
-
-        <!-- Header: Right Content -->
-        <div class="mt-md-0 mt-2">
-          <h4 class="invoice-title">
-            order
-            <span class="invoice-number">#{{ id }}</span>
-          </h4>
-          <div class="invoice-date-wrapper">
-            <p class="invoice-date-title">
-              下訂日期:
-            </p>
-            <p class="invoice-date">
-              {{ orderDate }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </b-card-body>
-
-    <!-- Spacer -->
-    <hr class="invoice-spacing">
-
-    <b-card-body
-      class="invoice-padding pt-0"
-    >
-      <b-col
-        cols="12"
-        xl="6"
-        class="p-0"
-      >
-        <div>
           <h6 class="mb-2">
             付款資訊:
           </h6>
@@ -77,10 +45,26 @@
               </tr>
             </tbody>
           </table>
+          <h6 class="mb-2" />
         </div>
-      </b-col>
-    </b-card-body>
 
+        <!-- Header: Right Content -->
+        <div class="mt-md-0 mt-2">
+          <h4 class="invoice-title">
+            order
+            <span class="invoice-number">#{{ id }}</span>
+          </h4>
+          <div class="invoice-date-wrapper">
+            <p class="invoice-date-title">
+              下訂日期:
+            </p>
+            <p class="invoice-date">
+              {{ orderDate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </b-card-body>
     <b-table-lite
       responsive
       :items="items"
@@ -115,9 +99,9 @@
         >
           <div class="invoice-total-wrapper">
             <div class="invoice-total-item">
-              <p class="invoice-total-title">
-                <strong>Total:{{ total }}</strong>
-              </p>
+              <h4>
+                <strong>總計: {{ total }}</strong>
+              </h4>
             </div>
           </div>
         </b-col>
