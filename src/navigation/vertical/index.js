@@ -24,7 +24,7 @@ export default async function () {
           name: 'category',
           params: { id: category.id },
         },
-        icon: 'FileIcon',
+        icon: 'ShoppingBagIcon',
       })
     })
   })

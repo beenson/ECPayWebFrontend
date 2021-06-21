@@ -26,7 +26,7 @@ const router = new VueRouter({
         access: 'user',
       },
     },
-    {
+    /* {
       path: '/second-page',
       name: 'second-page',
       component: () => import('@/views/SecondPage.vue'),
@@ -39,7 +39,7 @@ const router = new VueRouter({
           },
         ],
       },
-    },
+    }, */
     {
       path: '/category/:id',
       name: 'category',

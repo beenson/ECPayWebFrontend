@@ -122,7 +122,7 @@
 
 <script>
 import {
-  BCard, BTable, BAvatar, BBadge, BRow, BCol, BFormGroup, BTableLite, BFormSelect, BPagination, BInputGroup, BFormInput, BInputGroupAppend, BButton, BImg,
+  BCard, BCardBody, BTable, BAvatar, BBadge, BRow, BCol, BFormGroup, BTableLite, BFormSelect, BPagination, BInputGroup, BFormInput, BInputGroupAppend, BButton, BImg,
 } from 'bootstrap-vue'
 import useJwt from '@/auth/jwt/useJwt'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -130,6 +130,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 export default {
   components: {
     BCard,
+    BCardBody,
     BTable,
     BTableLite,
     BAvatar,
@@ -154,6 +155,7 @@ export default {
       type: '銀行',
       bank: '--------',
       code: '987987',
+      total: 0,
       infoModal: {
         id: 'info-modal',
         title: '',
