@@ -55,17 +55,23 @@
                 <td class="pr-1">
                   付款方式:
                 </td>
-                <td><span class="font-weight-bold">{{ type }}</span></td>
+                <td><span class="font-weight-bold">{{ getPaymentType(type) }}</span></td>
               </tr>
-              <tr>
+              <tr v-show="type === 'ATM'">
                 <td class="pr-1">
                   銀行:
                 </td>
-                <td>{{ bank }}</td>
+                <td>{{ bank }} {{ getBandName(bank) }}</td>
               </tr>
-              <tr>
+              <tr v-show="type === 'ATM'">
                 <td class="pr-1">
-                  代碼:
+                  匯款帳號:
+                </td>
+                <td>{{ code }}</td>
+              </tr>
+              <tr v-show="type === 'CVS'">
+                <td class="pr-1">
+                  繳費代碼:
                 </td>
                 <td>{{ code }}</td>
               </tr>
@@ -244,6 +250,34 @@ export default {
           })
         })
       })
+    },
+    getBandName(code) {
+      switch (code) {
+        case '004':
+          return '台灣銀行'
+        case '812':
+          return '台新銀行'
+        case '822':
+          return '中國信託'
+        case '007':
+          return '第一銀行'
+        case '005':
+          return '土地銀行'
+        case '814':
+          return '大眾銀行'
+        default:
+          return '未知的銀行'
+      }
+    },
+    getPaymentType(type) {
+      switch (type) {
+        case 'ATM':
+          return 'ATM匯款'
+        case 'CVS':
+          return '超商代碼'
+        default:
+          return '未知'
+      }
     },
   },
 }
