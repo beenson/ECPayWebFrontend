@@ -30,6 +30,13 @@ export default async function () {
           icon: 'UserIcon',
         },
         {
+          title: '分類管理',
+          route: {
+            name: 'admin.categorys',
+          },
+          icon: 'CoffeeIcon',
+        },
+        {
           title: '商品管理',
           route: {
             name: 'admin.products',

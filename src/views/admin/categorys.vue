@@ -4,7 +4,7 @@
       variant="primary"
       @click="create"
     >
-      新增商品
+      新增分類
     </b-button>
     <b-row>
       <b-col
@@ -188,23 +188,14 @@ export default {
       },
       fields: [
         { key: 'id', label: '編號', sortable: true },
-        { key: 'category', label: '種類', sortable: true },
         { key: 'name', label: '名稱', sortable: true },
-        { key: 'onSell', label: '是否上架', sortable: true },
-        { key: 'price', label: '價格', sortable: true },
-        { key: 'sellAmount', label: '售出數量', sortable: true },
-        { key: 'storageAmount', label: '庫存數量', sortable: true },
+        { key: 'priority', label: '排序', sortable: true },
       ],
       items: [
         {
           id: 1,
-          category: '',
           name: 'name',
-          desc: '',
-          onSell: '',
-          price: '',
-          sellAmount: '',
-          storageAmount: '',
+          priority: 0,
         },
       ],
       categories: [],
@@ -220,7 +211,6 @@ export default {
   },
   created() {
     this.loadCategory()
-    this.loadProduct()
   },
   mounted() {
     // Set the initial number of items
@@ -241,8 +231,8 @@ export default {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },
-    loadProduct() {
-      useJwt.axiosIns.post('http://127.0.0.1:8080/product/list').then(res => {
+    loadCategory() {
+      useJwt.axiosIns.post('http://127.0.0.1:8080/category/categorys').then(res => {
         if (res.data.error) {
           this.showToast(res.data.error, 'danger')
           return
@@ -251,35 +241,18 @@ export default {
         res.data.forEach(item => {
           this.items.push({
             id: item.id,
-            category: this.categories.find(x => x.value === item.categoryId).text,
             name: item.name,
-            desc: item.desc,
-            onSell: item.onSell ? '販售中' : '未販賣',
-            price: item.price,
-            sellAmount: item.sellAmount,
-            storageAmount: item.storageAmount,
+            priority: item.priority,
           })
         })
         this.totalRows = this.items.length
       })
     },
-    loadCategory() {
-      useJwt.axiosIns.post('http://127.0.0.1:8080/category/categorys').then(res => {
-        const list = res.data
-        list.sort((a, b) => b.priority - a.priority) // 排序 => priority越大越前面
-        list.forEach(category => {
-          this.categories.push({
-            value: category.id,
-            text: category.name,
-          })
-        })
-      })
-    },
     onRowSelected(items) {
-      this.$router.push({ name: 'admin.product', params: { id: items[0].id, categories: this.categories } })
+      this.$router.push({ name: 'admin.category', params: { id: items[0].id } })
     },
     create() {
-      this.$router.push({ name: 'admin.productCreate', params: { categories: this.categories } })
+      this.$router.push({ name: 'admin.category.create', params: { categories: this.categories } })
     },
   },
 }

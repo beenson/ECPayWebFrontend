@@ -204,6 +204,63 @@ const router = new VueRouter({
           },
         },
         {
+          path: 'categorys',
+          name: 'admin.categorys',
+          component: () => import('@/views/admin/categorys.vue'),
+          meta: {
+            pageTitle: '分類管理',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '分類管理',
+                active: true,
+              },
+            ],
+          },
+        },
+        {
+          path: 'category/create',
+          name: 'admin.category.create',
+          component: () => import('@/views/admin/newCategory.vue'),
+          meta: {
+            pageTitle: '建立分類',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '建立分類',
+                active: true,
+              },
+            ],
+          },
+        },
+        {
+          path: 'category/:id',
+          name: 'admin.category',
+          component: () => import('@/views/admin/category.vue'),
+          meta: {
+            pageTitle: '分類管理',
+            access: 'admin',
+            breadcrumb: [
+              {
+                text: '管理後台',
+                active: true,
+              },
+              {
+                text: '分類管理',
+                active: true,
+              },
+            ],
+          },
+        },
+        {
           path: 'product/create',
           name: 'admin.productCreate',
           component: () => import('@/views/admin/product_create.vue'),
