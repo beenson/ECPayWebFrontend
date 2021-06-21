@@ -46,9 +46,11 @@
 <script>
 import { FormWizard, TabContent } from 'vue-form-wizard'
 import { ref } from '@vue/composition-api'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import ECommerceCheckoutStepPayment from './ECommerceCheckoutStepPayment.vue'
 import ECommerceCheckoutStepCart from './ECommerceCheckoutStepCart.vue'
 import ECommerceCheckoutStepAddress from './ECommerceCheckoutStepAddress.vue'
+import ShoppingCart from './ShoppingCart'
 
 export default {
   components: {
@@ -91,6 +93,20 @@ export default {
 
       // Dummy Details
       checkoutDetails,
+    }
+  },
+  created() {
+    if (ShoppingCart.get().length === 0) {
+      this.$router.replace('/').then(() => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: '購物車為空。',
+            icon: 'ShoppingCartIcon',
+            variant: 'warning',
+          },
+        })
+      })
     }
   },
 }
