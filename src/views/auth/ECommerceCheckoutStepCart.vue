@@ -1,10 +1,8 @@
 <template>
   <div class="list-view product-checkout mt-0">
 
-    <!-- Products List -->
     <e-commerce-checkout-step-cart-products />
 
-    <!-- Checkout Options -->
     <div class="checkout-options">
       <b-card>
         <div class="price-details">

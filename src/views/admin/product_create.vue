@@ -1,23 +1,6 @@
 <template>
   <b-card>
     <div>
-      <!-- Media -->
-      <b-media class="mb-2">
-        <template #aside>
-          <b-avatar
-            ref="previewEl"
-            :src="productData.photo"
-            :text="avatarText(productData.name)"
-            :variant="`light-primary`"
-            size="90px"
-            rounded
-          />
-        </template>
-        <h4 class="mb-1">
-          {{ productData.name }}
-        </h4>
-      </b-media>
-
       <!-- Product Info: Input Fields -->
       <b-form>
         <b-row>

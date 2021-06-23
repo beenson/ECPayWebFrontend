@@ -10,7 +10,6 @@
       hide-buttons
       class="checkout-form-wizard steps-transparent"
     >
-      <!-- account detail tab -->
       <tab-content
         title="購買列表"
         icon="feather icon-shopping-cart"
@@ -18,7 +17,6 @@
         <e-commerce-checkout-step-cart @next-step="formWizardNextStep" />
       </tab-content>
 
-      <!-- address -->
       <tab-content
         title="聯絡資訊"
         icon="feather icon-home"
@@ -29,7 +27,6 @@
         />
       </tab-content>
 
-      <!-- social link -->
       <tab-content
         title="付款"
         icon="feather icon-credit-card"
@@ -54,11 +51,8 @@ import ShoppingCart from './ShoppingCart'
 
 export default {
   components: {
-    // 3rd Party
     FormWizard,
     TabContent,
-
-    // SFC
     ECommerceCheckoutStepCart,
     ECommerceCheckoutStepAddress,
     ECommerceCheckoutStepPayment,
@@ -70,7 +64,6 @@ export default {
       refFormWizard.value.nextTab()
     }
 
-    // ? This is just dummy details
     const checkoutDetails = ref({
       address: {
         fullName: '',
@@ -90,8 +83,6 @@ export default {
     return {
       refFormWizard,
       formWizardNextStep,
-
-      // Dummy Details
       checkoutDetails,
     }
   },

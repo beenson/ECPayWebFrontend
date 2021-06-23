@@ -157,40 +157,6 @@
             <span>點我登入</span>
           </b-link>
         </b-card-text>
-
-        <div class="divider my-2">
-          <div class="divider-text">
-            以下都不能用
-          </div>
-        </div>
-
-        <!-- social buttons -->
-        <div class="auth-footer-btn d-flex justify-content-center">
-          <b-button
-            variant="facebook"
-            href="javascript:void(0)"
-          >
-            <feather-icon icon="FacebookIcon" />
-          </b-button>
-          <b-button
-            variant="twitter"
-            href="javascript:void(0)"
-          >
-            <feather-icon icon="TwitterIcon" />
-          </b-button>
-          <b-button
-            variant="google"
-            href="javascript:void(0)"
-          >
-            <feather-icon icon="MailIcon" />
-          </b-button>
-          <b-button
-            variant="github"
-            href="javascript:void(0)"
-          >
-            <feather-icon icon="GithubIcon" />
-          </b-button>
-        </div>
       </b-card>
     <!-- /Register v1 -->
     </div>

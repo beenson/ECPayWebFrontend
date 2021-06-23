@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import useJwt from '@/auth/jwt/useJwt'
 
 Vue.use(VueRouter)
-// 註解 -- 路由器
+// 路由器
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -335,10 +335,7 @@ const router = new VueRouter({
   ],
 })
 
-// ? For splash screen
-// Remove afterEach hook if you are not using splash screen
 router.afterEach(() => {
-  // Remove initial loading
   const appLoading = document.getElementById('loading-bg')
   if (appLoading) {
     appLoading.style.display = 'none'
